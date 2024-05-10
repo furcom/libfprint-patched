@@ -1,15 +1,17 @@
 #!/bin/bash
-echo -e "\n Installing packages..."
-dnf install -y ./libfprint-1.94.6-1.fc40.x86_64.rpm
-dnf install -y fprintd fprintd-pam
 
-echo -e "\nCopying firmware files..."
-cp ./libfpcbep.so /usr/lib/x86_64-linux-gnu/
-cp -r lib/* /lib/
-cp -r usr/* /usr/
+# Install packages
+dnf install -y ./libfprint-*.rpm
+dnf install -y fprintd
+dnf install -y fprintd-pam
+
+# Copy firmware files
+cp -rf ./libfpcbep.so /usr/lib64/
+cp -rf ./lib/* /lib/
+cp -rf ./usr/* /usr/
 mkdir -p /var/log/fpc
 
-echo -e "\nEnabling fingerprint reader..."
+# Enable fprintd
 systemctl start fprintd
 systemctl enable fprintd
 authselect enable-feature with-fingerprint
